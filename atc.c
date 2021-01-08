@@ -4,11 +4,6 @@
  * Licensed under the GNU General Public License, version 3.0 only.
  * SPDX-License-Identifier: GPL-3.0-only
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #else
@@ -18,12 +13,24 @@
 #define PACKAGE_BUGREPORT "the distributor of the package"
 #endif
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#if defined(HAVE_UNISTD_H)
+#include <unistd.h>
+#endif
+
+#if defined(HAVE_GETOPT_LONG)
+#include <getopt.h>
+#endif
+
 static const char HELP[]
     = "usage: %s [-e <early>]...\n"
-      "  -h                        show this help text\n"
-      "  -v, -V                    show the atc version\n"
-      "  -e <early>                exit <early> nanoseconds early\n"
-      "  -E <early>                exit <early> milliseconds early\n"
+      "  --help, -h                show this help text\n"
+      "  --version, -v, -V         show the atc version\n"
+      "  --early-ns, -e <early>    exit <early> nanoseconds early\n"
+      "  --early, -E <early>       exit <early> milliseconds early\n"
       "\n"
       "This is the help for " PACKAGE_NAME " " PACKAGE_VERSION ".\n"
       "Report bugs to " PACKAGE_BUGREPORT ".\n"
@@ -94,7 +101,18 @@ static int getopt_impl(int argc, char** argv)
 {
     static const char optstring[] = ":hvVe:E:";
 
+#if defined(HAVE_GETOPT_LONG)
+    static const struct option optlong[] = {
+        { "help", no_argument, NULL, 'h' },
+        { "version", no_argument, NULL, 'v' },
+        { "early-ns", required_argument, NULL, 'e' },
+        { "early", required_argument, NULL, 'E' },
+    };
+
+    return getopt_long(argc, argv, optstring, optlong, NULL);
+#elif defined(HAVE_GETOPT)
     return getopt(argc, argv, optstring);
+#endif
 }
 
 int main(int argc, char** argv)
