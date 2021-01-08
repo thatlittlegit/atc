@@ -8,7 +8,7 @@ AC_CONFIG_SRCDIR([atc.c])
 AC_LANG_WERROR
 AC_PROG_CC
 
-AC_CHECK_FUNC([clock_gettime])
+AC_CHECK_FUNC([clock_gettime],, AC_ERROR([clock_gettime must be defined]))
 
 AC_CHECK_HEADERS([unistd.h],
     AC_CHECK_FUNC([getopt],
