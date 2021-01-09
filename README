@@ -1,0 +1,8 @@
+atc is a small, simple program to wait until the end of a second
+before exiting. It might be useful for aligning clocks, such that you
+only have to say, "execute every second" instead of doing it yourself.
+
+To install from a tarball, you can do the standard GNU autoconf
+'./configure && make && make install' procedure. If you're installing
+from the Git repository, you'll need to run `autoreconf --install'
+first to generate the necessary files.

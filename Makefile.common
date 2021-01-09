@@ -2,10 +2,6 @@
 # This file is part of the atc project.
 # Licensed under the GNU General Public License, version 3.0 only.
 # SPDX-License-Identifier: GPL-3.0-only
-# @configure_input@
-
-CFLAGS:=$(CFLAGS) @CFLAGS@ @DEFS@
-LDFLAGS:=$(LDFLAGS) @LDFLAGS@
-LDLIBS:=$(LDLIBS) @LIBS@
-
-atc: atc.o
+autoreconf-local:
+	[ -f ./configure ] || autoreconf --install
+	@echo "configure exists, please run it to build"
