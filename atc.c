@@ -9,7 +9,7 @@
 #else
 /* we don't know who's building it, so all generic info */
 #define PACKAGE_NAME "atc"
-#define PACKAGE_VERSION "unknown"
+#define PACKAGE_VERSION "(unknown)"
 #define PACKAGE_BUGREPORT "the distributor of the package"
 
 #ifdef __unix__
