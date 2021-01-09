@@ -9,21 +9,62 @@ AC_CONFIG_SRCDIR([atc.c])
 AC_LANG_WERROR
 AC_PROG_CC
 
+AC_ARG_WITH([getopt],
+    [AS_HELP_STRING([--with-getopt], [
+        the argument parser to use.
+        'yes' means to autodetect, 'no' and arguments are not parsed.
+        Options are 'yes', 'no', 'getopt', 'getopt-long', 'builtin'
+    ])],
+    # dnl ') <-- vim
+    AS_VAR_SET([optparser], $enableval),
+    AS_VAR_SET([optparser], yes))
+
 AC_CHECK_FUNC([clock_gettime],, AC_ERROR([clock_gettime must be defined]))
 
-AC_CHECK_HEADERS([unistd.h],
-    AC_CHECK_FUNC([getopt],
-        AS_VAR_SET([optparser])
-        AC_DEFINE([HAVE_GETOPT], [1], [Define if getopt exists.])))
-AC_CHECK_HEADERS([getopt.h],
-    AC_CHECK_FUNC([getopt_long],
-        AS_VAR_SET([optparser])
-        AC_DEFINE([HAVE_GETOPT_LONG], [1], [Define if getopt_long exists.])))
+AS_VAR_IF([optparser], [yes], AS_VAR_SET([optparser_any]))
+AC_DEFUN(ATC_UNLESS, AS_VAR_IF([$1], $2))
 
-AS_VAR_SET_IF([optparser],, AC_ERROR([missing an arguments parser.]))
+AC_DEFUN(ATC_TRY_OPTPARSER, [
+    AS_IF([test "$optparser" = "$1" || test "$optparser" = "yes"], [
+        AS_MESSAGE([trying $1 for arguments parser...])
+        AC_CHECK_HEADER([$2], [
+        AC_CHECK_FUNC([$3], [
+            dnl success
+            AS_UNSET([optparser_any])
+            AS_VAR_SET([optparser], [done])
+            AC_DEFINE([$4], [1], [$5])
+        ], [
+            dnl function not found
+            ATC_UNLESS([optparser_any], AS_ERROR([function $3 for $1 not found]))
+        ])], [
+            dnl header not found
+            ATC_UNLESS([optparser_any], AS_ERROR([header $2 for $1 not found]))
+        ])
+    ])
+    AH_TEMPLATE([$4], [$5])
+])
+
+ATC_TRY_OPTPARSER(getopt-long, getopt.h, getopt_long, HAVE_GETOPT_LONG, [Use getopt_long as the arguments parser.])
+ATC_TRY_OPTPARSER(getopt, unistd.h, getopt, HAVE_GETOPT, [Use getopt as the arguments parser.])
+
+AS_VAR_IF([optparser], [], [
+    dnl use no argument parsing
+    AS_MESSAGE([using no argument parser])
+    AC_DEFINE([HAVE_NO_ARGS_PARSER], [0], [Are we using an arguments parser?])
+    AH_TEMPLATE([HAVE_NO_ARGS_PARSER], [0], [Are we using an arguments parser?])
+    AS_VAR_SET([optparser], [done])
+])
+
+AS_VAR_IF([optparser], [done],, [
+    dnl use built-in, no define
+    AS_MESSAGE([using built-in arguments parser])
+    AS_UNSET([optparser_any])
+    AS_VAR_SET([optparser], [builtin])
+])
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_HEADERS([config.h])
+
 AC_OUTPUT
 
 AH_TEMPLATE([HAVE_GETOPT], [Define if getopt exists.])

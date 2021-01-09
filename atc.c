@@ -22,12 +22,12 @@
 #include <stdlib.h>
 #include <time.h>
 
-#if defined(HAVE_UNISTD_H)
-#include <unistd.h>
-#endif
-
 #if defined(HAVE_GETOPT_LONG)
 #include <getopt.h>
+#elif defined(HAVE_UNISTD_H)
+#include <unistd.h>
+#else
+static int optind = 0;
 #endif
 
 static const char HELP[]
@@ -56,6 +56,7 @@ static int parse_options(struct atc_options* opts, int argc, char** argv)
 
     opts->early = 0;
 
+#ifndef HAVE_NO_ARGS_PARSER
     while ((chr = getopt_impl(argc, argv)) > 0) {
         switch (chr) {
         /* help */
@@ -116,7 +117,27 @@ static int getopt_impl(int argc, char** argv)
     return getopt_long(argc, argv, optstring, optlong, NULL);
 #elif defined(HAVE_GETOPT)
     return getopt(argc, argv, optstring);
+#else
+    if (optind >= argc) {
+        return -1;
+    }
+
+    if (*argv[optind] != '-'
+#ifdef _WIN32
+        && *argv[optind] != '/'
 #endif
+    ) {
+        optopt = argv[optind] + 1;
+        return '?';
+    }
+
+    optarg = argv[optind + 1];
+    return argv[optind][1];
+#endif /* builtin argument parser */
+#else /* HAVE_NO_ARGS_PARSER */
+    /* this is in parse_options */
+    return 1;
+#endif /* HAVE_NO_ARGS_PARSER */
 }
 
 int main(int argc, char** argv)
