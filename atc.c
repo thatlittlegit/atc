@@ -41,8 +41,6 @@ static const char HELP[]
       "Report bugs to " PACKAGE_BUGREPORT ".\n"
       "";
 
-static const char VERSIONTEXT[] = PACKAGE_NAME " " PACKAGE_VERSION "\n";
-
 static const char* progname = "atc";
 
 struct atc_options {
@@ -67,7 +65,7 @@ static int parse_options(struct atc_options* opts, int argc, char** argv)
         /* version */
         case 'v':
         case 'V':
-            fputs(VERSIONTEXT, stdout);
+            fputs(PACKAGE_NAME " " PACKAGE_VERSION "\n", stdout);
             return -EXIT_SUCCESS;
         /* early */
         case 'e':
