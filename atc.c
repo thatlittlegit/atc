@@ -60,15 +60,6 @@ static int parse_options(struct atc_options* opts, int argc, char** argv)
 
     while ((chr = getopt_impl(argc, argv)) > 0) {
         switch (chr) {
-        /* unknown option */
-        case '?':
-            fprintf(stderr, "%s: unknown option %c\n", progname, optopt);
-            return -EXIT_FAILURE;
-        /* missing argument */
-        case ':':
-            fprintf(stderr, "%s: option %c requires an argument\n", progname,
-                optopt);
-            return -EXIT_FAILURE;
         /* help */
         case 'h':
             fputs(HELP, stdout);
@@ -96,6 +87,16 @@ static int parse_options(struct atc_options* opts, int argc, char** argv)
             }
             break;
         }
+        /* missing argument */
+        case ':':
+            fprintf(stderr, "%s: option %c requires an argument\n", progname,
+                optopt);
+            return -EXIT_FAILURE;
+        /* unknown option */
+        case '?':
+        default:
+            fprintf(stderr, "%s: unknown option %c\n", progname, optopt);
+            return -EXIT_FAILURE;
         }
     }
 
