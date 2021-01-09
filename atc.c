@@ -11,6 +11,11 @@
 #define PACKAGE_NAME "atc"
 #define PACKAGE_VERSION "unknown"
 #define PACKAGE_BUGREPORT "the distributor of the package"
+
+#ifdef __unix__
+#define HAVE_UNISTD_H
+#define HAVE_GETOPT
+#endif
 #endif
 
 #include <stdio.h>
