@@ -62,6 +62,46 @@ AS_VAR_IF([optparser], [done],, [
     AS_VAR_SET([optparser], [builtin])
 ])
 
+AC_CHECK_HEADER([time.h], [
+    AC_CHECK_FUNC([clock_gettime], [
+        AC_DEFINE([HAVE_CLOCK_GETTIME], [1], [Defined if we should use clock_gettime.])
+        AH_TEMPLATE([HAVE_CLOCK_GETTIME], [1], [Defined if we should use clock_gettime.])
+        AS_VAR_SET([foundtime], [1])
+    ])
+])
+
+AS_VAR_SET_IF([foundtime],, [
+    AC_CHECK_HEADER([sys/time.h], [
+        AC_CHECK_FUNC([gettimeofday], [
+            AC_DEFINE([HAVE_GETTIMEOFDAY], [1], [Defined if we have gettimeofday.])
+            AH_TEMPLATE([HAVE_GETTIMEOFDAY], [Defined if we have gettimeofday.])
+            AS_VAR_SET([foundtime], [1])
+        ])
+    ])
+])
+
+AS_VAR_SET_IF([foundtime],, AC_ERROR([Could not find time function like gettimeofday or clock_gettime.]))
+
+AC_CHECK_HEADER([time.h], [
+    AC_CHECK_FUNC([nanosleep], [
+        AC_DEFINE([HAVE_NANOSLEEP], [1], [Defined if we have nanosleep.])
+        AH_TEMPLATE([HAVE_NANOSLEEP], [Defined if we have nanosleep.])
+        AS_VAR_SET([foundsleep], [1])
+    ])
+])
+
+AS_VAR_SET_IF([foundsleep],, [
+    AC_CHECK_HEADER([unistd.h], [
+        AC_CHECK_FUNC([usleep], [
+            AC_DEFINE([HAVE_USLEEP], [1], [Defined if we have usleep.])
+            AH_TEMPLATE([HAVE_USLEEP], [Defined if we have usleep.])
+            AS_VAR_SET([foundsleep], [1])
+        ])
+    ])
+])
+
+AS_VAR_SET_IF([foundsleep],, AC_ERROR([Could not find sleep function like nanosleep.]))
+
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_HEADERS([config.h])
 

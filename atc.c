@@ -15,12 +15,21 @@
 #ifdef __unix__
 #define HAVE_UNISTD_H
 #define HAVE_GETOPT
+#define HAVE_CLOCK_GETTIME
+#define HAVE_NANOSLEEP
 #endif
 #endif
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#if defined(HAVE_NANOSLEEP) || defined(HAVE_CLOCK_GETTIME)
 #include <time.h>
+#endif
+
+#ifdef HAVE_GETTIMEOFDAY
+#include <sys/time.h>
+#endif
 
 #if defined(HAVE_GETOPT_LONG)
 #include <getopt.h>
@@ -49,6 +58,8 @@ struct atc_options {
 
 static int parse_options(struct atc_options* opts, int argc, char** argv);
 static int getopt_impl(int argc, char** argv);
+static long currentns(void);
+static void atc_nanosleep(long ns);
 
 static int parse_options(struct atc_options* opts, int argc, char** argv)
 {
@@ -140,9 +151,41 @@ static int getopt_impl(int argc, char** argv)
 #endif /* HAVE_NO_ARGS_PARSER */
 }
 
+static long currentns(void)
+{
+#if defined(HAVE_CLOCK_GETTIME)
+    struct timespec clock;
+    if (clock_gettime(CLOCK_REALTIME, &clock) < 0) {
+        perror("atc");
+        return 0;
+    }
+    return clock.tv_nsec;
+#elif defined(HAVE_GETTIMEOFDAY)
+    struct timeval clock;
+    /* can't fail except with EFAULT, which can't happen */
+    gettimeofday(&clock, NULL);
+    return (long)clock.tv_usec * 1000;
+#else
+#error "no way to get current time"
+#endif
+}
+
+static void atc_nanosleep(long ns)
+{
+#if defined(HAVE_NANOSLEEP)
+    struct timespec clock;
+    clock.tv_sec = 0;
+    clock.tv_nsec = ns;
+    nanosleep(&clock, NULL);
+#elif defined(HAVE_USLEEP)
+    usleep(ns / 1000);
+#else
+#error "no way to sleep"
+#endif
+}
+
 int main(int argc, char** argv)
 {
-    struct timespec clock;
     struct atc_options atc_options;
     int ret;
 
@@ -154,13 +197,6 @@ int main(int argc, char** argv)
         return -ret;
     }
 
-    if (clock_gettime(CLOCK_REALTIME, &clock) < 0) {
-        perror("atc");
-        return EXIT_FAILURE;
-    }
-
-    clock.tv_sec = 0;
-    clock.tv_nsec = 1000000000 - clock.tv_nsec - atc_options.early;
-    nanosleep(&clock, NULL);
+    atc_nanosleep(1000000000 - currentns() - atc_options.early);
     return EXIT_SUCCESS;
 }
