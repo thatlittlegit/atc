@@ -1,3 +1,7 @@
+2021-01-11  thatlittlegit  <personal@thatlittlegit.tk>
+        * atc.1: Add a manual page.
+        * Makefile.am: Install the manual page automatically.
+
 2021-01-10  thatlittlegit  <personal@thatlittlegit.tk>
         * ChangeLog: Create this changelog! Now this is meta.
 

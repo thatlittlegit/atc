@@ -1,0 +1,85 @@
+.\" (c) 2021 thatlittlegit
+.\" This file is part of the atc project.
+.\" Licensed under the GNU General Public License, version 3.0 only.
+.Dd 2021-01-11
+.Dt ATC 1
+.Sh NAME
+.Nm atc
+.Nd exits at the end of a second
+.\"
+.\"
+.\"
+.Sh SYNOPSIS
+.Nm atc
+.Op Fl -help
+.Op Fl -version
+.Op Cm --early
+.Op Cm --early-ns
+.\"
+.\"
+.\"
+.Sh DESCRIPTION
+atc exits at the end of a second on the clock. It's useful so
+downstream programs can just
+.Xr sleep 3
+one second instead of aligning to the clock.
+.Pp
+It generally is off a little, however the overhead is minimal: about 3
+ms on the author's machine. This is perhaps due to process scheduling
+and launch.
+.Pp
+If more perfection is wanted, the --early flag can be used to indicate
+(in milliseconds) how early to fire, such that the overhead is
+accounted for. --early-ns is similar for nanoseconds.
+.Pp
+The short forms of the flags are listed in the help text.
+.\"
+.\"
+.\"
+.Sh EXIT STATUS
+atc always exits successfully unless an option is invalid.
+.\"
+.\"
+.\"
+.Sh EXAMPLES
+.Bd -literal
+.Bf Sy Li
+$ atc && date -Ins
+.Ef
+2021-01-11T15:54:42,002922598-05:00
+.Ed
+.Pp
+Notice that the date was output 2.92ms after the second ended.
+.\"
+.\"
+.\"
+.Sh IMPLEMENTATION NOTES
+atc is implemented differently depending on the system it is built on.
+If
+.Xr autoconf 1
+can't find certain functions, then older alternatives are used instead.
+.\"
+.Ss Arguments parsing
+Arguments parsing uses either
+.Xr getopt 3 ,
+.Xr getopt_long 3 ,
+a built-in arguments parser, or no arguments parsing at all.
+.\"
+.Ss Sleeping
+atc sleeps with either
+.Xr usleep 3
+or
+.Xr nanosleep 3
+(which is preferred).
+.Pp
+.Ss Time
+The time is obtained with
+.Xr gettimeofday 3
+or
+.Xr clock_gettime 3
+(preferred).
+.Pp
+.Sh AUTHORS
+.An thatlittlegit Aq personal@thatlittlegit.tk
+.Pp
+Licensed under the GNU General Public License, version 3.0.
