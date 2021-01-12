@@ -1,7 +1,0 @@
-# (c) 2021 thatlittlegit
-# This file is part of the atc project.
-# Licensed under the GNU General Public License, version 3.0 only.
-# SPDX-License-Identifier: GPL-3.0-only
-autoreconf-local:
-	[ -f ./configure ] || autoreconf --install
-	@echo "configure exists, please run it to build"

@@ -1,4 +1,17 @@
 2020-01-11  thatlittlegit  <personal@thatlittlegit.tk>
+        There's no need for the Makefile stub, as it was not documented
+        anywhere and complicates the git repo. It also dies in a
+        maintainer-clean.
+
+        The solution is to type `autoreconf --install' instead of
+        `make'; it doesn't give the false illusion that you can avoid
+        autoconf. Autoconf will always find (and haunt) you.
+
+        * Makefile.am: Remove include of Makefile.common
+        * Makefile.common: Remove entirely.
+        * Makefile: Remove Makefile.common stub.
+
+2020-01-11  thatlittlegit  <personal@thatlittlegit.tk>
         * HACKING: Add contributing guide.
 
 2021-01-11  thatlittlegit  <personal@thatlittlegit.tk>
