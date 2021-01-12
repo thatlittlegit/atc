@@ -1,4 +1,7 @@
 2020-01-11  thatlittlegit  <personal@thatlittlegit.tk>
+	* configure.ac: Quote macro names and definitions to avoid warnings.
+
+2020-01-11  thatlittlegit  <personal@thatlittlegit.tk>
 	* Makefile.am: Add a symlink to atc named second_align.
 	* atc.1: Mention the new synonym.
 

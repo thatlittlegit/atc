@@ -22,9 +22,9 @@ AC_ARG_WITH([getopt],
 AC_CHECK_FUNC([clock_gettime],, AC_ERROR([clock_gettime must be defined]))
 
 AS_VAR_IF([optparser], [yes], AS_VAR_SET([optparser_any]))
-AC_DEFUN(ATC_UNLESS, AS_VAR_IF([$1], $2))
+AC_DEFUN([ATC_UNLESS], [AS_VAR_IF([$1], $2)])
 
-AC_DEFUN(ATC_TRY_OPTPARSER, [
+AC_DEFUN([ATC_TRY_OPTPARSER], [
     AS_IF([test "$optparser" = "$1" || test "$optparser" = "yes"], [
         AS_MESSAGE([trying $1 for arguments parser...])
         AC_CHECK_HEADER([$2], [
