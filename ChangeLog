@@ -1,3 +1,6 @@
+2020-01-11  thatlittlegit  <personal@thatlittlegit.tk>
+        * HACKING: Add contributing guide.
+
 2021-01-11  thatlittlegit  <personal@thatlittlegit.tk>
         * atc.1: Add a manual page.
         * Makefile.am: Install the manual page automatically.

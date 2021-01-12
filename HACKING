@@ -1,0 +1,86 @@
+] (c) 2021 thatlittlegit
+] This file is part of the atc project.
+] Licensed under the Creative Commons BY-SA 4.0 International license.
+] (Remember to switch out the names, licenses, etc.!)
+
+Thanks for wanting to hack on atc!
+You probably want to see the introduction, copyright, and environment
+sections. Formatting is touched on a bit in the introduction, but might
+be worth reading anyways.
+
+=== TABLE OF CONTENTS ===
+i. Table of Contents
+1. Introduction
+2. Copyright
+3. Environment
+4. Formatting
+
+To begin working on atc, you'll need to make sure you have the fairly
+obvious tools: C compiler, text editor, autoconf, automake, make.
+That's all you'll need to start. clang-format is also very useful; if
+you don't clang-format your code, it might take longer to be accepted.
+
+Once you make a change, you will need to contribute it. You can do this
+by emailing a patch to <personal@thatlittlegit.tk>, or by sending a
+GitHub pull request. For the patch, all you need is diff(1); for the
+PR, you will indeed need Git and a GitHub account.
+
+When you're making your changes, keep track of them in the ChangeLog
+file. This follows the normal GNU changelog format; see the GNU Coding
+Standards [0]. At the end, your changelog entry should sum up what
+happens in your commit/patch. If you have a larger change with multiple
+commits that are semantically different, send them as separate
+patches/commits and separate changelog entries.
+
+Document the copyright ownership of a file at the top, and mention that
+it is licensed under the GNU General Public License, version 3.0.
+to contact you. Claim copyright on a file once you've made non-trivial
+changes; this is mostly your discretion, but you can refer to the GNU
+Maintainer Information [1] if you're really not sure. Your notice should
+look like:
+
+    // (c) 2021 John Doe
+    // This file is part of the atc project.
+    // Licensed under the GNU General Public License, version 3.0 only.
+
+Note that I currently don't want copyright papers, and that the last
+two lines shouldn't be included if they're already there. Replace the
+comment indicator with whatever's appropriate (e.g. dnl, #). Multiline
+comments are OK. Avoid other licenses, except for documentation. In
+that case, use the GFDL or Creative Commons licenses; ask the
+maintainer as to what to use.
+
+Remember to include your email address in the ChangeLog, and remember to
+update it if it changes; if the copyright ever needs to be reassigned or
+the license updated, it'll be important to contact you quickly. (You
+should still leave it even if you don't claim copyright, so someone can
+contact you if they have questions.)
+
+=== ENVIRONMENT ===
+If you have the distributed tarball and don't need to edit the
+Makefile.am or configure.ac files, then you can just ./configure and
+use Make normally.
+
+Otherwise, you'll need autoconf and automake. Run
+`autoreconf --install' to create all the files they need, and then you
+can ./configure as normal. Automake should automatically reconfigure
+when you change ./configure.
+
+To build, just run make. The executable will be in `atc'.
+
+=== FORMATTING ===
+C files should be formatted with clang-format. Don't make any
+formatting changes: even if it looks better, it's not easy to
+replicate. (You can try tweaking the config.) They should have about
+80 columns maximum.
+
+Text files should be wrapped at 72 characters, and be UTF-8.
+
+Manpages should have three comment lines between sections, and one
+between subsections.
+
+License files should not be modified from their canonical version.
+
+=== REFERENCES ===
+[0] https://www.gnu.org/prep/standards/html_node/Change-Logs.html
+[1] https://www.gnu.org/prep/maintain/html_node/Legally-Significant.html
