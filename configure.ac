@@ -3,7 +3,7 @@ dnl This file is part of the atc project.
 dnl Licensed under the GNU General Public License, version 3.0 only.
 dnl SPDX-License-Identifier: GPL-3.0-only
 AC_PREREQ([2.69])
-AC_INIT([atc], [0.1], [personal@thatlittlegit.tk])
+AC_INIT([atc], [1.0], [personal@thatlittlegit.tk])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_CONFIG_SRCDIR([atc.c])
 AC_LANG_WERROR
