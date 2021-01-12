@@ -1,4 +1,7 @@
 2020-01-11  thatlittlegit  <personal@thatlittlegit.tk>
+	* configure.ac: Fix double brackets in my email address.
+
+2020-01-11  thatlittlegit  <personal@thatlittlegit.tk>
 	Change the ChangeLog over to tabs. VIM highlights all of the spaces,
 	and tabs are cool.
 
