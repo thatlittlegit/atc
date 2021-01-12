@@ -1,4 +1,10 @@
 2020-01-11  thatlittlegit  <personal@thatlittlegit.tk>
+	* Makefile.am: Add a symlink to atc named second_align.
+	* atc.1: Mention the new synonym.
+
+	This avoids the conflict with atc(6) in bsdgames.
+
+2020-01-11  thatlittlegit  <personal@thatlittlegit.tk>
 	* configure.ac: Fix double brackets in my email address.
 
 2020-01-11  thatlittlegit  <personal@thatlittlegit.tk>
